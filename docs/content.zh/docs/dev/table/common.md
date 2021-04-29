@@ -329,7 +329,7 @@ b_b_t_env = BatchTableEnvironment.create(environment_settings=b_b_settings)
 // get a TableEnvironment
 TableEnvironment tableEnv = ...; // see "Create a TableEnvironment" section
 
-// table is the result of a simple projection query 
+// table is the result of a simple projection query
 Table projTable = tableEnv.from("X").select(...);
 
 // register the Table projTable as table "projectedTable"
@@ -341,7 +341,7 @@ tableEnv.createTemporaryView("projectedTable", projTable);
 // get a TableEnvironment
 val tableEnv = ... // see "Create a TableEnvironment" section
 
-// table is the result of a simple projection query 
+// table is the result of a simple projection query
 val projTable: Table = tableEnv.from("X").select(...)
 
 // register the Table projTable as table "projectedTable"
@@ -353,7 +353,7 @@ tableEnv.createTemporaryView("projectedTable", projTable)
 # get a TableEnvironment
 table_env = ... # see "Create a TableEnvironment" section
 
-# table is the result of a simple projection query 
+# table is the result of a simple projection query
 proj_table = table_env.from_path("X").select(...)
 
 # register the Table projTable as table "projectedTable"
@@ -433,19 +433,19 @@ tEnv.useDatabase("custom_database");
 Table table = ...;
 
 // register the view named 'exampleView' in the catalog named 'custom_catalog'
-// in the database named 'custom_database' 
+// in the database named 'custom_database'
 tableEnv.createTemporaryView("exampleView", table);
 
 // register the view named 'exampleView' in the catalog named 'custom_catalog'
-// in the database named 'other_database' 
+// in the database named 'other_database'
 tableEnv.createTemporaryView("other_database.exampleView", table);
 
 // register the view named 'example.View' in the catalog named 'custom_catalog'
-// in the database named 'custom_database' 
+// in the database named 'custom_database'
 tableEnv.createTemporaryView("`example.View`", table);
 
 // register the view named 'exampleView' in the catalog named 'other_catalog'
-// in the database named 'other_database' 
+// in the database named 'other_database'
 tableEnv.createTemporaryView("other_catalog.other_database.exampleView", table);
 
 ```
@@ -460,19 +460,19 @@ tEnv.useDatabase("custom_database")
 val table: Table = ...;
 
 // register the view named 'exampleView' in the catalog named 'custom_catalog'
-// in the database named 'custom_database' 
+// in the database named 'custom_database'
 tableEnv.createTemporaryView("exampleView", table)
 
 // register the view named 'exampleView' in the catalog named 'custom_catalog'
-// in the database named 'other_database' 
+// in the database named 'other_database'
 tableEnv.createTemporaryView("other_database.exampleView", table)
 
 // register the view named 'example.View' in the catalog named 'custom_catalog'
-// in the database named 'custom_database' 
+// in the database named 'custom_database'
 tableEnv.createTemporaryView("`example.View`", table)
 
 // register the view named 'exampleView' in the catalog named 'other_catalog'
-// in the database named 'other_database' 
+// in the database named 'other_database'
 tableEnv.createTemporaryView("other_catalog.other_database.exampleView", table)
 ```
 {{< /tab >}}
@@ -508,7 +508,7 @@ Table orders = tableEnv.from("Orders");
 // compute revenue for all customers from France
 Table revenue = orders
   .filter($("cCountry").isEqual("FRANCE"))
-  .groupBy($("cID"), $("cName")
+  .groupBy($("cID"), $("cName"))
   .select($("cID"), $("cName"), $("revenue").sum().as("revSum"));
 
 // emit or convert Table
@@ -535,7 +535,7 @@ val revenue = orders
 ```
 
 **Note:** The Scala Table API uses Scala String interpolation that starts with a dollar sign (`$`) to reference the attributes of a `Table`. The Table API uses Scala implicits. Make sure to import
-* `org.apache.flink.table.api._` - for implicit expression conversions 
+* `org.apache.flink.table.api._` - for implicit expression conversions
 * `org.apache.flink.api.scala._` and `org.apache.flink.table.api.bridge.scala._` if you want to convert from/to DataStream.
 {{< /tab >}}
 {{< tab "Python" >}}
@@ -889,7 +889,7 @@ tableEnv.createTemporaryView("myTable2", stream, $("myLong"), $("myString"));
 {{< /tab >}}
 {{< tab "Scala" >}}
 ```scala
-// get TableEnvironment 
+// get TableEnvironment
 // registration of a DataSet is equivalent
 val tableEnv: StreamTableEnvironment = ... // see "Create a TableEnvironment" section
 
@@ -975,7 +975,7 @@ val table2: Table = tableEnv.fromDataStream(stream, $"myLong", $"myString")
 {{< tabs "9533a9f4-e6e8-44d7-a29c-33713724eacc" >}}
 {{< tab "Java" >}}
 ```java
-// get StreamTableEnvironment. 
+// get StreamTableEnvironment.
 StreamTableEnvironment tableEnv = ...; // see "Create a TableEnvironment" section
 
 // Table with two fields (String name, Integer age)
@@ -984,26 +984,26 @@ Table table = ...
 // convert the Table into an append DataStream of Row by specifying the class
 DataStream<Row> dsRow = tableEnv.toAppendStream(table, Row.class);
 
-// convert the Table into an append DataStream of Tuple2<String, Integer> 
+// convert the Table into an append DataStream of Tuple2<String, Integer>
 //   via a TypeInformation
 TupleTypeInfo<Tuple2<String, Integer>> tupleType = new TupleTypeInfo<>(
   Types.STRING(),
   Types.INT());
-DataStream<Tuple2<String, Integer>> dsTuple = 
+DataStream<Tuple2<String, Integer>> dsTuple =
   tableEnv.toAppendStream(table, tupleType);
 
 // convert the Table into a retract DataStream of Row.
-//   A retract stream of type X is a DataStream<Tuple2<Boolean, X>>. 
-//   The boolean field indicates the type of the change. 
+//   A retract stream of type X is a DataStream<Tuple2<Boolean, X>>.
+//   The boolean field indicates the type of the change.
 //   True is INSERT, false is DELETE.
-DataStream<Tuple2<Boolean, Row>> retractStream = 
+DataStream<Tuple2<Boolean, Row>> retractStream =
   tableEnv.toRetractStream(table, Row.class);
 
 ```
 {{< /tab >}}
 {{< tab "Scala" >}}
 ```scala
-// get TableEnvironment. 
+// get TableEnvironment.
 // registration of a DataSet is equivalent
 val tableEnv: StreamTableEnvironment = ... // see "Create a TableEnvironment" section
 
@@ -1014,12 +1014,12 @@ val table: Table = ...
 val dsRow: DataStream[Row] = tableEnv.toAppendStream[Row](table)
 
 // convert the Table into an append DataStream of Tuple2[String, Int]
-val dsTuple: DataStream[(String, Int)] dsTuple = 
+val dsTuple: DataStream[(String, Int)] dsTuple =
   tableEnv.toAppendStream[(String, Int)](table)
 
 // convert the Table into a retract DataStream of Row.
-//   A retract stream of type X is a DataStream[(Boolean, X)]. 
-//   The boolean field indicates the type of the change. 
+//   A retract stream of type X is a DataStream[(Boolean, X)].
+//   The boolean field indicates the type of the change.
 //   True is INSERT, false is DELETE.
 val retractStream: DataStream[(Boolean, Row)] = tableEnv.toRetractStream[Row](table)
 ```
@@ -1052,13 +1052,13 @@ DataSet<Row> dsRow = tableEnv.toDataSet(table, Row.class);
 TupleTypeInfo<Tuple2<String, Integer>> tupleType = new TupleTypeInfo<>(
   Types.STRING(),
   Types.INT());
-DataSet<Tuple2<String, Integer>> dsTuple = 
+DataSet<Tuple2<String, Integer>> dsTuple =
   tableEnv.toDataSet(table, tupleType);
 ```
 {{< /tab >}}
 {{< tab "Scala" >}}
 ```scala
-// get TableEnvironment 
+// get TableEnvironment
 // registration of a DataSet is equivalent
 val tableEnv = BatchTableEnvironment.create(env)
 

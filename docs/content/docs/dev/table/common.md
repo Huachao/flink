@@ -260,7 +260,7 @@ query plan. It can be created in a catalog as follows:
 // get a TableEnvironment
 TableEnvironment tableEnv = ...; // see "Create a TableEnvironment" section
 
-// table is the result of a simple projection query 
+// table is the result of a simple projection query
 Table projTable = tableEnv.from("X").select(...);
 
 // register the Table projTable as table "projectedTable"
@@ -272,7 +272,7 @@ tableEnv.createTemporaryView("projectedTable", projTable);
 // get a TableEnvironment
 val tableEnv = ... // see "Create a TableEnvironment" section
 
-// table is the result of a simple projection query 
+// table is the result of a simple projection query
 val projTable: Table = tableEnv.from("X").select(...)
 
 // register the Table projTable as table "projectedTable"
@@ -284,7 +284,7 @@ tableEnv.createTemporaryView("projectedTable", projTable)
 # get a TableEnvironment
 table_env = ... # see "Create a TableEnvironment" section
 
-# table is the result of a simple projection query 
+# table is the result of a simple projection query
 proj_table = table_env.from_path("X").select(...)
 
 # register the Table projTable as table "projectedTable"
@@ -331,19 +331,19 @@ tEnv.useDatabase("custom_database");
 Table table = ...;
 
 // register the view named 'exampleView' in the catalog named 'custom_catalog'
-// in the database named 'custom_database' 
+// in the database named 'custom_database'
 tableEnv.createTemporaryView("exampleView", table);
 
 // register the view named 'exampleView' in the catalog named 'custom_catalog'
-// in the database named 'other_database' 
+// in the database named 'other_database'
 tableEnv.createTemporaryView("other_database.exampleView", table);
 
 // register the view named 'example.View' in the catalog named 'custom_catalog'
-// in the database named 'custom_database' 
+// in the database named 'custom_database'
 tableEnv.createTemporaryView("`example.View`", table);
 
 // register the view named 'exampleView' in the catalog named 'other_catalog'
-// in the database named 'other_database' 
+// in the database named 'other_database'
 tableEnv.createTemporaryView("other_catalog.other_database.exampleView", table);
 
 ```
@@ -358,19 +358,19 @@ tEnv.useDatabase("custom_database")
 val table: Table = ...;
 
 // register the view named 'exampleView' in the catalog named 'custom_catalog'
-// in the database named 'custom_database' 
+// in the database named 'custom_database'
 tableEnv.createTemporaryView("exampleView", table)
 
 // register the view named 'exampleView' in the catalog named 'custom_catalog'
-// in the database named 'other_database' 
+// in the database named 'other_database'
 tableEnv.createTemporaryView("other_database.exampleView", table)
 
 // register the view named 'example.View' in the catalog named 'custom_catalog'
-// in the database named 'custom_database' 
+// in the database named 'custom_database'
 tableEnv.createTemporaryView("`example.View`", table)
 
 // register the view named 'exampleView' in the catalog named 'other_catalog'
-// in the database named 'other_database' 
+// in the database named 'other_database'
 tableEnv.createTemporaryView("other_catalog.other_database.exampleView", table)
 ```
 {{< /tab >}}
@@ -381,7 +381,7 @@ Query a Table
 
 ### Table API
 
-The Table API is a language-integrated query API for Scala and Java. In contrast to SQL, queries are not specified as Strings but are composed step-by-step in the host language. 
+The Table API is a language-integrated query API for Scala and Java. In contrast to SQL, queries are not specified as Strings but are composed step-by-step in the host language.
 
 The API is based on the `Table` class which represents a table (streaming or batch) and offers methods to apply relational operations. These methods return a new `Table` object, which represents the result of applying the relational operation on the input `Table`. Some relational operations are composed of multiple method calls such as `table.groupBy(...).select()`, where `groupBy(...)` specifies a grouping of `table`, and `select(...)` the projection on the grouping of `table`.
 
@@ -402,7 +402,7 @@ Table orders = tableEnv.from("Orders");
 // compute revenue for all customers from France
 Table revenue = orders
   .filter($("cCountry").isEqual("FRANCE"))
-  .groupBy($("cID"), $("cName")
+  .groupBy($("cID"), $("cName"))
   .select($("cID"), $("cName"), $("revenue").sum().as("revSum"));
 
 // emit or convert Table
@@ -429,7 +429,7 @@ val revenue = orders
 ```
 
 **Note:** The Scala Table API uses Scala String interpolation that starts with a dollar sign (`$`) to reference the attributes of a `Table`. The Table API uses Scala implicits. Make sure to import
-* `org.apache.flink.table.api._` - for implicit expression conversions 
+* `org.apache.flink.table.api._` - for implicit expression conversions
 * `org.apache.flink.api.scala._` and `org.apache.flink.table.api.bridge.scala._` if you want to convert from/to DataStream.
 {{< /tab >}}
 {{< tab "Python" >}}
@@ -598,16 +598,16 @@ Table API and SQL queries can be easily mixed because both return `Table` object
 
 {{< top >}}
 
-Emit a Table 
+Emit a Table
 ------------
 
-A `Table` is emitted by writing it to a `TableSink`. A `TableSink` is a generic interface to support a wide variety of file formats (e.g. CSV, Apache Parquet, Apache Avro), storage systems (e.g., JDBC, Apache HBase, Apache Cassandra, Elasticsearch), or messaging systems (e.g., Apache Kafka, RabbitMQ). 
+A `Table` is emitted by writing it to a `TableSink`. A `TableSink` is a generic interface to support a wide variety of file formats (e.g. CSV, Apache Parquet, Apache Avro), storage systems (e.g., JDBC, Apache HBase, Apache Cassandra, Elasticsearch), or messaging systems (e.g., Apache Kafka, RabbitMQ).
 
-A batch `Table` can only be written to a `BatchTableSink`, while a streaming `Table` requires either an `AppendStreamTableSink`, a `RetractStreamTableSink`, or an `UpsertStreamTableSink`. 
+A batch `Table` can only be written to a `BatchTableSink`, while a streaming `Table` requires either an `AppendStreamTableSink`, a `RetractStreamTableSink`, or an `UpsertStreamTableSink`.
 
 Please see the documentation about [Table Sources & Sinks]({{< ref "docs/dev/table/sourcesSinks" >}}) for details about available sinks and instructions for how to implement a custom `DynamicTableSink`.
 
-The `Table.executeInsert(String tableName)` method emits the `Table` to a registered `TableSink`. The method looks up the `TableSink` from the catalog by the name and validates that the schema of the `Table` is identical to the schema of the `TableSink`. 
+The `Table.executeInsert(String tableName)` method emits the `Table` to a registered `TableSink`. The method looks up the `TableSink` from the catalog by the name and validates that the schema of the `Table` is identical to the schema of the `TableSink`.
 
 The following examples shows how to emit a `Table`:
 
@@ -709,7 +709,7 @@ a Table API or SQL query is translated when:
 
 {{< top >}}
 
-Integration with DataStream 
+Integration with DataStream
 ---------------------------
 
 Table API and SQL queries can be easily integrated with and embedded into [DataStream]({{< ref "docs/dev/datastream/overview" >}}) programs.
@@ -768,7 +768,7 @@ The schema of the resulting view depends on the data type of the registered coll
 {{< tabs "f2b3f22a-9ffe-4373-bf20-e1e24277e5c4" >}}
 {{< tab "Java" >}}
 ```java
-StreamTableEnvironment tableEnv = ...; 
+StreamTableEnvironment tableEnv = ...;
 DataStream<Tuple2<Long, String>> stream = ...
 
 Table table2 = tableEnv.fromDataStream(stream, $("myLong"), $("myString"));
@@ -786,7 +786,7 @@ val table2: Table = tableEnv.fromDataStream(stream, $"myLong", $"myString")
 
 {{< top >}}
 
-### Convert a Table into a DataStream 
+### Convert a Table into a DataStream
 
 The results of a `Table` can be converted into a `DataStream`.
 In this way, custom `DataStream` programs can be run on the result of a Table API or SQL query.
@@ -803,7 +803,7 @@ The following list gives an overview of the features of the different options:
 
 #### Convert a Table into a DataStream
 
-A `Table` that is the result of a streaming query will be updated dynamically, i.e., it is changing as new records arrive on the query's input streams. Hence, the `DataStream` into which such a dynamic query is converted needs to encode the updates of the table. 
+A `Table` that is the result of a streaming query will be updated dynamically, i.e., it is changing as new records arrive on the query's input streams. Hence, the `DataStream` into which such a dynamic query is converted needs to encode the updates of the table.
 
 There are two modes to convert a `Table` into a `DataStream`:
 
@@ -813,7 +813,7 @@ There are two modes to convert a `Table` into a `DataStream`:
 {{< tabs "cbee265a-216d-44c7-8423-cd5cd7f56e35" >}}
 {{< tab "Java" >}}
 ```java
-StreamTableEnvironment tableEnv = ...; 
+StreamTableEnvironment tableEnv = ...;
 
 Table table = tableEnv.fromValues(
     DataTypes.Row(
@@ -830,8 +830,8 @@ TupleTypeInfo<Tuple2<String, Integer>> tupleType = new TupleTypeInfo<>(Types.STR
 DataStream<Tuple2<String, Integer>> dsTuple = tableEnv.toAppendStream(table, tupleType);
 
 // Convert the Table into a retract DataStream of Row.
-// A retract stream of type X is a DataStream<Tuple2<Boolean, X>>. 
-// The boolean field indicates the type of the change. 
+// A retract stream of type X is a DataStream<Tuple2<Boolean, X>>.
+// The boolean field indicates the type of the change.
 // True is INSERT, false is DELETE.
 DataStream<Tuple2<Boolean, Row>> retractStream = tableEnv.toRetractStream(table, Row.class);
 
@@ -853,19 +853,19 @@ val table: Table = tableEnv.fromValues(
 val dsRow: DataStream[Row] = tableEnv.toAppendStream[Row](table)
 
 // Convert the Table into an append DataStream of (String, Integer) with TypeInformation
-val dsTuple: DataStream[(String, Int)] dsTuple = 
+val dsTuple: DataStream[(String, Int)] dsTuple =
   tableEnv.toAppendStream[(String, Int)](table)
 
 // Convert the Table into a retract DataStream of Row.
-// A retract stream of type X is a DataStream<Tuple2<Boolean, X>>. 
-// The boolean field indicates the type of the change. 
+// A retract stream of type X is a DataStream<Tuple2<Boolean, X>>.
+// The boolean field indicates the type of the change.
 // True is INSERT, false is DELETE.
 val retractStream: DataStream[(Boolean, Row)] = tableEnv.toRetractStream[Row](table)
 ```
 {{< /tab >}}
 {{< /tabs >}}
 
-**Note:** A detailed discussion about dynamic tables and their properties is given in the [Dynamic Tables](streaming/dynamic_tables.html) document. 
+**Note:** A detailed discussion about dynamic tables and their properties is given in the [Dynamic Tables](streaming/dynamic_tables.html) document.
 
 {{< hint warning >}}
 Once the Table is converted to a DataStream, please use the `StreamExecutionEnvironment.execute()` method to execute the DataStream program.
@@ -884,7 +884,7 @@ The mapping of a data type to a table schema can happen in two ways: **based on 
 
 Position-based mapping can be used to give fields a more meaningful name while keeping the field order. This mapping is available for composite data types *with a defined field order* as well as atomic types. Composite data types such as tuples, rows, and case classes have such a field order. However, fields of a POJO must be mapped based on the field names (see next section). Fields can be projected out but can't be renamed using an alias `as`.
 
-When defining a position-based mapping, the specified names must not exist in the input data type, otherwise the API will assume that the mapping should happen based on the field names. If no field names are specified, the default field names and field order of the composite type are used or `f0` for atomic types. 
+When defining a position-based mapping, the specified names must not exist in the input data type, otherwise the API will assume that the mapping should happen based on the field names. If no field names are specified, the default field names and field order of the composite type are used or `f0` for atomic types.
 
 {{< tabs "44be95d8-c058-462b-b836-1e0f5e3f52c3" >}}
 {{< tab "Java" >}}
@@ -1135,7 +1135,7 @@ Fields can be renamed by providing names for all fields (mapping based on positi
 {{< tabs "8a3a527b-820f-4eb0-9d6f-cc546c988888" >}}
 {{< tab "Java" >}}
 ```java
-StreamTableEnvironment tableEnv = ...; 
+StreamTableEnvironment tableEnv = ...;
 
 // DataStream of Row with two fields "name" and "age" specified in `RowTypeInfo`
 DataStream<Row> stream = ...
@@ -1211,7 +1211,7 @@ Advanced users may provide custom optimizations via a `CalciteConfig` object tha
 Explaining a Table
 ------------------
 
-The Table API provides a mechanism to explain the logical and optimized query plans to compute a `Table`. 
+The Table API provides a mechanism to explain the logical and optimized query plans to compute a `Table`.
 This is done through the `Table.explain()` method or `StatementSet.explain()` method. `Table.explain()`returns the plan of a `Table`. `StatementSet.explain()` returns the plan of multiple sinks. It returns a String describing three plans:
 
 1. the Abstract Syntax Tree of the relational query, i.e., the unoptimized logical query plan,
@@ -1339,7 +1339,7 @@ tEnv.connect(new FileSystem().path("/sink/path2"))
     .withFormat(new Csv().deriveSchema())
     .withSchema(schema)
     .createTemporaryTable("MySink2");
-    
+
 StatementSet stmtSet = tEnv.createStatementSet();
 
 Table table1 = tEnv.from("MySource1").where($("word").like("F%"));
@@ -1378,7 +1378,7 @@ tEnv.connect(new FileSystem().path("/sink/path2"))
     .withFormat(new Csv().deriveSchema())
     .withSchema(schema)
     .createTemporaryTable("MySink2")
-    
+
 val stmtSet = tEnv.createStatementSet()
 
 val table1 = tEnv.from("MySource1").where($"word".like("F%"))
@@ -1417,7 +1417,7 @@ t_env.connect(FileSystem().path("/sink/path2")))
     .with_format(Csv().deriveSchema())
     .with_schema(schema)
     .create_temporary_table("MySink2")
-    
+
 stmt_set = t_env.create_statement_set()
 
 table1 = t_env.from_path("MySource1").where(col('word').like('F%'))
